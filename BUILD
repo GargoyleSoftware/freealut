@@ -1,6 +1,6 @@
 cc_library(
-	name = "freealut",
-	hdrs = glob([
+  name = "freealut",
+  hdrs = glob([
       "include/*.h",
       "src/*.h",
       ]),
@@ -28,6 +28,13 @@ cc_library(
          # TODO: Link against OpenAL
       ],
   }),
+  linkopts = select({
+      "//platforms:win32": [
+      ],
+      "//conditions:default": [
+          '-lopenal',
+      ],
+  }),
   defines = select({
       "//platforms:win32": [
           '_WIN32',
@@ -37,8 +44,11 @@ cc_library(
           'ALUT_BUILD_LIBRARY',
           'HAVE__STAT',
       ],
-      "//conditions:default": [ 
-         # TODO: Pass UNIX flags
+      "//conditions:default": [
+          'HAVE_STDINT_H',
+          'HAVE_USLEEP',
+          'HAVE_UNISTD_H',
+          'HAVE_STAT',
       ],
       }),
   visibility = ["//visibility:public"],
